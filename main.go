@@ -28,9 +28,7 @@ func main() {
     var wg sync.WaitGroup
   
     // Create and run three processes
-    wg.Add(1)
-    wg.Add(1)
-    wg.Add(1)
+    wg.Add(3)
           
     go func (from_C <-chan bool, to_B chan<- int) {
 
