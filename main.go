@@ -46,6 +46,7 @@ func main() {
             new_weight := rand.Intn(10)
           
             a.Weight = new_weight
+            
       		fmt.Printf("ProcessA: Weight = %d\n", a.Weight)
       		to_B <- a.Weight
       	}
@@ -71,6 +72,7 @@ func main() {
       		new_color := colors[rand.Intn(len(colors))]
           
       		b.Color = new_color
+            
       		fmt.Printf("ProcessB: Color = %s\n", b.Color)
       		to_C <- b.Color
       	}
@@ -93,6 +95,7 @@ func main() {
       		new_alive := rand.Intn(2) == 1
     
       		c.Alive = new_alive
+            
       		fmt.Printf("ProcessC: Received from ProcessB: Alive = %t\n", c.Alive)
       		to_A <- c.Alive
       	}
