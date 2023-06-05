@@ -1,0 +1,47 @@
+PROC processA (CHAN OF BOOL fromC, CHAN OF INT toB)
+  INT weight:
+
+  WHILE TRUE
+    SEQ
+      fromC ? alive
+      stdout.string("ProcessA: Received from ProcessC: Alive = ", alive, "\n")
+      weight := RANDOM(10)
+      stdout.string("ProcessA: Weight = ", weight, "\n")
+      toB ! weight
+:
+
+PROC processB (CHAN OF INT fromA, CHAN OF STRING toC)
+  STRING color:
+
+  WHILE TRUE
+    SEQ
+      fromA ? weight
+      stdout.string("ProcessB: Received from ProcessA: Weight = ", weight, "\n")
+      color := ["red", "green", "blue", "N/A"][RANDOM(4)]
+      stdout.string("ProcessB: Color = ", color, "\n")
+      toC ! color
+:
+
+PROC processC (CHAN OF STRING fromB, CHAN OF BOOL toA)
+  BOOL alive:
+
+  WHILE TRUE
+    SEQ
+      fromB ? color
+      stdout.string("ProcessC: Received from ProcessB: Color = ", color, "\n")
+      alive := (RANDOM(2) = 1)
+      stdout.string("ProcessC: Received from ProcessB: Alive = ", alive, "\n")
+      toA ! alive
+:
+
+-- Create channels for communication
+CHAN OF BOOL cToA:
+CHAN OF INT aToB:
+CHAN OF STRING bToC:
+
+-- Run three processes
+PAR
+  processA(cToA, aToB)
+  processB(aToB, bToC)
+  processC(bToC, cToA)
+:
